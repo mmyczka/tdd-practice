@@ -348,3 +348,21 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+
+
+*.class
+*.log
+
+.idea/
+
+.bloop
+.history
+.metals
+.vscode
+.bsp
+metals.sbt
+
+target/
+
+.DS_Store
