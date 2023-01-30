@@ -22,7 +22,6 @@ class UsingScalaMockSample extends AnyFreeSpec with Matchers with MockFactory {
 
       val storagePlaceDbService = new StoragePlaceDbService(daoMock)
 
-
       (daoMock.persist _).expects(garageTable)
       (daoMock.persist _).expects(hammer)
       (daoMock.persist _).expects(knife)
@@ -31,6 +30,29 @@ class UsingScalaMockSample extends AnyFreeSpec with Matchers with MockFactory {
 
       storagePlaceDbService.persist(garageTable)
 
+    }
+
+    "can also mock regular object, and along with other traits" in{
+      val daoMock = mock[DAO]
+
+      //set up actual values to be used
+      val hammer: StoredItem = mock[StoredItem]
+      val screwdriver: StoredItem = mock[StoredItem]
+      val knife: StoredItem = mock[StoredItem]
+
+      val garageTable: StoragePlace = mock[StoragePlace]
+
+      val storagePlaceDbService = new StoragePlaceDbService(daoMock)
+
+      inSequence {
+        (daoMock.persist _).expects(garageTable)
+        (garageTable.getStoredItems _).expects().returning(Some(List(hammer, screwdriver, knife)))
+        (daoMock.persist _).expects(hammer)
+        (daoMock.persist _).expects(screwdriver)
+        (daoMock.persist _).expects(knife)
+      }
+
+      storagePlaceDbService.persist(garageTable)
     }
   }
 }
